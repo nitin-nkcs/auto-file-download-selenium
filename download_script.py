@@ -6,12 +6,13 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+import config  # Import the config module
 
 # Initialize the WebDriver
 driver = webdriver.Chrome()
 
 # Open the website
-driver.get('https://rtmnuresults.org/QuestionPaperSetDownload.aspx')
+driver.get(config.URL)
 
 # Function to select options from a dropdown
 def select_dropdown_options(dropdown_id, ignore_values):
@@ -28,8 +29,7 @@ def select_options_containing_text(dropdown_id, text):
 # Function to rename the downloaded file
 def rename_downloaded_file(session, exam, subject):
     new_name = f"{session}_{exam}_{subject}.pdf"
-    # Path to the Downloads folder
-    downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
+    downloads_path = config.DOWNLOADS_PATH
     
     # Get list of all files in the Downloads folder
     list_of_files = glob.glob(os.path.join(downloads_path, "*"))
@@ -48,9 +48,9 @@ def rename_downloaded_file(session, exam, subject):
     os.rename(latest_file, new_file_path)
 
 # Ignore values
-ignore_values = ['0', '-- Select --']
+ignore_values = config.IGNORE_VALUES
 # Text to search in Exam dropdown
-exam_search_text = 'LL.B. 3'
+exam_search_text = config.EXAM_SEARCH_TEXT
 
 # Get all session options
 session_options = select_dropdown_options('ContentPlaceHolder1_DropDownList1', ignore_values)
